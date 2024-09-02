@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import axios from "axios";
 
 const EditForm = ({ point, onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
@@ -15,8 +14,6 @@ const EditForm = ({ point, onSubmit, onCancel }) => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    // Eğer alan sayısal bir değer bekliyorsa, parse et
     const parsedValue =
       name === "CAPACITY_OF_PARK" || name === "LONGITUDE" || name === "LATITUDE"
         ? parseFloat(value) || 0
@@ -30,27 +27,21 @@ const EditForm = ({ point, onSubmit, onCancel }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitting data for ID:", formData.id); // `formData.id`'yi doğru kullanma
     try {
-      const response = await axios.put(
-        `http://localhost:3000/api/update/${formData.id}`,
-        formData
-      );
-      console.log("Data successfully updated:", response.data);
-      if (onSubmit) onSubmit(formData);
+      await onSubmit(formData);
     } catch (error) {
-      console.error("Error updating data:", error);
+      console.error("error:", error);
     }
   };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded-md shadow-lg w-1/3">
-        <h2 className="text-xl font-bold mb-4">Edit Parking Spot</h2>
+        <h2 className="text-xl font-bold mb-4">Park Noktalarını Düzenle</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Park Name
+              İspark Adı
             </label>
             <input
               type="text"
@@ -63,7 +54,7 @@ const EditForm = ({ point, onSubmit, onCancel }) => {
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Location Name
+              Lokasyon Adı
             </label>
             <input
               type="text"
@@ -75,7 +66,7 @@ const EditForm = ({ point, onSubmit, onCancel }) => {
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Capacity
+              Kapasite
             </label>
             <input
               type="number"
@@ -87,7 +78,7 @@ const EditForm = ({ point, onSubmit, onCancel }) => {
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Working Hours
+              Çalışma Saatleri
             </label>
             <input
               type="text"
@@ -99,7 +90,7 @@ const EditForm = ({ point, onSubmit, onCancel }) => {
           </div>
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              County Name
+              İlçe adı
             </label>
             <input
               type="text"
@@ -139,13 +130,13 @@ const EditForm = ({ point, onSubmit, onCancel }) => {
               onClick={onCancel}
               className="mr-2 bg-gray-300 text-gray-700 px-4 py-2 rounded-md"
             >
-              Cancel
+              İptal Et
             </button>
             <button
               type="submit"
               className="bg-blue-600 text-white px-4 py-2 rounded-md"
             >
-              Save
+              Kaydet
             </button>
           </div>
         </form>

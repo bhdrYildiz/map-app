@@ -8,17 +8,15 @@ const PORT = 3000;
 
 app.use(cors());
 
-// JSON ve URL-encoded verilerini parse etmek için middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// PostgreSQL bağlantısı
 const pool = new Pool({
-  user: "postgres", // PostgreSQL kullanıcı adı
-  host: "localhost", // PostgreSQL hostu
-  database: "DENEME", // Veritabanı adı
-  password: "137by1907.", // Şifre
-  port: 5432, // PostgreSQL portu
+  user: "postgres",
+  host: "localhost",
+  database: "DENEME",
+  password: "137by1907.",
+  port: 5432,
 });
 
 app.get("/api/ispark", async (req, res) => {
@@ -31,22 +29,20 @@ app.get("/api/ispark", async (req, res) => {
   }
 });
 
-// İBB API'den verileri çekip PostgreSQL'e kaydetmek için endpoint
 app.get("/api/update-ispark", async (req, res) => {
   try {
     const response = await axios.get(
       "https://data.ibb.gov.tr/api/3/action/datastore_search",
       {
         params: {
-          resource_id: "f4f56e58-5210-4f17-b852-effe356a890c", // Veri kümesi kimliği
-          limit: 700, // Döndürülecek kayıt sayısı
+          resource_id: "f4f56e58-5210-4f17-b852-effe356a890c",
+          limit: 700,
         },
       }
     );
 
     const records = response.data.result.records;
 
-    // Her bir kaydı veritabanına ekleme
     for (let record of records) {
       await pool.query(
         `INSERT INTO ispark_data (park_name, location_name, capacity_of_park, working_time, county_name, longitude, latitude)
@@ -107,26 +103,20 @@ app.put("/api/update/:id", async (req, res) => {
         id,
       ]
     );
-    
-    if (result.rowCount > 0) {
-      // Güncellenmiş kayıtları sorgula
-      const updatedRecord = await pool.query(
-        `SELECT * FROM ispark_data WHERE id = $1`,
-        [id]
-      );
 
+    if (result.rowCount > 0) {
       res.json({ message: "Data successfully updated" });
     } else {
       res.status(404).json({ message: "Record not found" });
     }
   } catch (error) {
     console.error("Error updating data:", error.message);
-    res.status(500).json({ message: "Error updating data", error: error.message });
+    res
+      .status(500)
+      .json({ message: "Error updating data", error: error.message });
   }
 });
 
-
-// Sunucuyu başlatma
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });

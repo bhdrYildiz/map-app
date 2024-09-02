@@ -21,7 +21,7 @@ const Map = ({ showFilterPanel }) => {
       const mapInstance = new maplibregl.Map({
         container: mapContainerRef.current,
         style: "https://basemap.ibb.gov.tr/static/rehber_altlik.json?id=281",
-        center: [28.98989, 41.01411], // Istanbul coordinates
+        center: [28.98989, 41.01411],
         zoom: 10,
       });
 
@@ -40,7 +40,6 @@ const Map = ({ showFilterPanel }) => {
       try {
         const response = await axios.get("http://localhost:3000/api/ispark");
 
-        // Veri doğrulama fonksiyonu ve filtreleme işlemi burada devam eder...
         const isValidCoordinate = (coord, min, max) =>
           typeof coord === "number" && coord >= min && coord <= max;
 
@@ -53,25 +52,22 @@ const Map = ({ showFilterPanel }) => {
         setData(validData);
         setFilteredData(validData);
       } catch (error) {
-        console.error("Failed to fetch data:", error);
+        console.error("error:", error);
       }
     };
 
     fetchData();
   }, []);
 
-  const handleFilter = ({ capacity, locationName, countyName }) => {
+  const handleFilter = ({ capacity, countyName }) => {
     const filtered = data.filter((point) => {
       const matchesCapacity =
         !capacity || point.capacity_of_park > parseInt(capacity);
-      const matchesLocationName =
-        !locationName 
-        point.location_name.toLowerCase().includes(locationName.toLowerCase());
       const matchesCountyName =
         !countyName ||
         point.county_name.toLowerCase().includes(countyName.toLowerCase());
 
-      return matchesCapacity && matchesLocationName && matchesCountyName;
+      return matchesCapacity && matchesCountyName;
     });
 
     setFilteredData(filtered);
@@ -106,10 +102,10 @@ const Map = ({ showFilterPanel }) => {
 
           const popup = new maplibregl.Popup().setDOMContent(popupNode);
           marker.setPopup(popup);
-
+          
           newMarkers.push(marker);
         } else {
-          console.error(`Invalid coordinates for point: ${point._id}`);
+          console.error(`geçersiz konum noktası: ${point._id}`);
         }
       });
 
@@ -134,16 +130,15 @@ const Map = ({ showFilterPanel }) => {
       setIsDialogOpen(false);
       window.location.reload();
     } catch (error) {
-      console.error("Failed to update data:", error);
+      console.error("error:", error);
     }
   };
 
   return (
-    <div className="relative">
+    <div className="w-full h-screen relative">
       <div
-        className="map-container"
+        className="map-container w-full h-full"
         ref={mapContainerRef}
-        style={{ height: "calc(100vh - 60px)" }}
       />
       {showFilterPanel && (
         <div className="absolute top-0 left-0 w-full bg-white shadow-lg p-4 h-80 overflow-y-auto flex">
@@ -159,7 +154,7 @@ const Map = ({ showFilterPanel }) => {
                   onClick={() => {
                     map.flyTo({
                       center: [point.longitude, point.latitude],
-                      zoom: 14,
+                      zoom: 17,
                     });
                     setSelectedPoint(point);
                   }}

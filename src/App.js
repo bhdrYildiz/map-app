@@ -9,11 +9,10 @@ const App = () => {
   };
 
   return (
-    <div className="app-container p-4">
-      <h1 className="text-2xl font-bold mb-4">İBB Harita Uygulaması</h1>
+    <div className="relative w-full h-screen">
       <button
         onClick={toggleFilterPanel}
-        className="filter-toggle-btn bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 mb-4"
+        className="absolute top-4 left-4 z-10 bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600"
       >
         {showFilterPanel ? "Filtrelemeyi Gizle" : "Filtrelemeyi Göster"}
       </button>

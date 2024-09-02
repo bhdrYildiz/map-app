@@ -5,10 +5,10 @@ const PopupComponent = ({ point, setSelectedPoint, setIsDialogOpen }) => {
     <div className="p-2 rounded-lg">
       <h2 className="text-xl font-bold mb-2">{point.park_name}</h2>
       <p>
-        <strong>Capacity:</strong> {point.capacity_of_park}
+        <strong>Kapasite:</strong> {point.capacity_of_park}
       </p>
       <p>
-        <strong>County:</strong> {point.county_name}
+        <strong>İlçe:</strong> {point.county_name}
       </p>
       <button
         className="bg-blue-500 text-white px-4 py-2 rounded-md mt-4"
@@ -17,7 +17,7 @@ const PopupComponent = ({ point, setSelectedPoint, setIsDialogOpen }) => {
           setIsDialogOpen(true);
         }}
       >
-        Edit
+        Düzenle
       </button>
     </div>
   );
