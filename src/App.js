@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Map from "./components/Map";
 
-function App() {
+const App = () => {
+  const [showFilterPanel, setShowFilterPanel] = useState(false);
+
+  const toggleFilterPanel = () => {
+    setShowFilterPanel(!showFilterPanel);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="app-container p-4">
+      <h1 className="text-2xl font-bold mb-4">İBB Harita Uygulaması</h1>
+      <button
+        onClick={toggleFilterPanel}
+        className="filter-toggle-btn bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 mb-4"
+      >
+        {showFilterPanel ? "Filtrelemeyi Gizle" : "Filtrelemeyi Göster"}
+      </button>
+      <Map showFilterPanel={showFilterPanel} />
     </div>
   );
-}
+};
 
 export default App;
