@@ -3,7 +3,7 @@ import axios from "axios";
 
 const EditForm = ({ point, onSubmit, onCancel }) => {
   const [formData, setFormData] = useState({
-    id: point.id, // Bu satırı ekliyoruz
+    id: point.id,
     PARK_NAME: point.park_name,
     LOCATION_NAME: point.location_name,
     CAPACITY_OF_PARK: point.capacity_of_park,
@@ -12,29 +12,28 @@ const EditForm = ({ point, onSubmit, onCancel }) => {
     LONGITUDE: point.longitude,
     LATITUDE: point.latitude,
   });
-  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
     // Eğer alan sayısal bir değer bekliyorsa, parse et
-    const parsedValue = name === "CAPACITY_OF_PARK" || name === "LONGITUDE" || name === "LATITUDE"
-      ? parseFloat(value) || 0
-      : value;
+    const parsedValue =
+      name === "CAPACITY_OF_PARK" || name === "LONGITUDE" || name === "LATITUDE"
+        ? parseFloat(value) || 0
+        : value;
 
     setFormData((prevData) => ({
       ...prevData,
       [name]: parsedValue,
     }));
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Submitting data for ID:", formData.id); // `formData.id`'yi doğru kullanma
     try {
       const response = await axios.put(
-        `http://localhost:3000/api/update/${formData.id}`, 
+        `http://localhost:3000/api/update/${formData.id}`,
         formData
       );
       console.log("Data successfully updated:", response.data);
@@ -43,7 +42,7 @@ const EditForm = ({ point, onSubmit, onCancel }) => {
       console.error("Error updating data:", error);
     }
   };
- 
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded-md shadow-lg w-1/3">

@@ -1,7 +1,6 @@
 import React from "react";
 
 const PopupComponent = ({ point, setSelectedPoint, setIsDialogOpen }) => {
-
   return (
     <div className="p-2 rounded-lg">
       <h2 className="text-xl font-bold mb-2">{point.park_name}</h2>

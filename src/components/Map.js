@@ -39,18 +39,17 @@ const Map = ({ showFilterPanel }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:3000/api/ispark");
-        console.log(response.data); // Dönen veriyi kontrol etmek için
-        
+
         // Veri doğrulama fonksiyonu ve filtreleme işlemi burada devam eder...
         const isValidCoordinate = (coord, min, max) =>
           typeof coord === "number" && coord >= min && coord <= max;
-    
+
         const validData = response.data.filter(
           (point) =>
             isValidCoordinate(point.latitude, -90, 90) &&
             isValidCoordinate(point.longitude, -180, 180)
         );
-    
+
         setData(validData);
         setFilteredData(validData);
       } catch (error) {
@@ -60,14 +59,13 @@ const Map = ({ showFilterPanel }) => {
 
     fetchData();
   }, []);
-  
 
   const handleFilter = ({ capacity, locationName, countyName }) => {
     const filtered = data.filter((point) => {
       const matchesCapacity =
         !capacity || point.capacity_of_park > parseInt(capacity);
       const matchesLocationName =
-        !locationName ||
+        !locationName 
         point.location_name.toLowerCase().includes(locationName.toLowerCase());
       const matchesCountyName =
         !countyName ||
@@ -81,41 +79,43 @@ const Map = ({ showFilterPanel }) => {
 
   useEffect(() => {
     if (map && filteredData.length > 0) {
-        markers.forEach((marker) => marker.remove());
-        setMarkers([]);
+      markers.forEach((marker) => marker.remove());
+      setMarkers([]);
 
-        const newMarkers = [];
+      const newMarkers = [];
 
-        filteredData.forEach((point) => {
-            if (typeof point.longitude === "number" && typeof point.latitude === "number") {
-                const marker = new maplibregl.Marker()
-                    .setLngLat([point.longitude, point.latitude])
-                    .addTo(map);
-                const popupNode = document.createElement("div");
+      filteredData.forEach((point) => {
+        if (
+          typeof point.longitude === "number" &&
+          typeof point.latitude === "number"
+        ) {
+          const marker = new maplibregl.Marker()
+            .setLngLat([point.longitude, point.latitude])
+            .addTo(map);
+          const popupNode = document.createElement("div");
 
-                ReactDOM.render(
-                    <PopupComponent
-                        point={point}
-                        popupNode={popupNode}
-                        setSelectedPoint={setSelectedPoint}
-                        setIsDialogOpen={setIsDialogOpen}
-                    />,
-                    popupNode
-                );
+          ReactDOM.render(
+            <PopupComponent
+              point={point}
+              popupNode={popupNode}
+              setSelectedPoint={setSelectedPoint}
+              setIsDialogOpen={setIsDialogOpen}
+            />,
+            popupNode
+          );
 
-                const popup = new maplibregl.Popup().setDOMContent(popupNode);
-                marker.setPopup(popup);
+          const popup = new maplibregl.Popup().setDOMContent(popupNode);
+          marker.setPopup(popup);
 
-                newMarkers.push(marker);
-            } else {
-                console.error(`Invalid coordinates for point: ${point._id}`);
-            }
-        });
+          newMarkers.push(marker);
+        } else {
+          console.error(`Invalid coordinates for point: ${point._id}`);
+        }
+      });
 
-        setMarkers(newMarkers);
+      setMarkers(newMarkers);
     }
-}, [map, filteredData]);
-
+  }, [map, filteredData]);
 
   const handleFormSubmit = async (updatedData) => {
     try {
@@ -132,6 +132,7 @@ const Map = ({ showFilterPanel }) => {
 
       setSelectedPoint(null);
       setIsDialogOpen(false);
+      window.location.reload();
     } catch (error) {
       console.error("Failed to update data:", error);
     }

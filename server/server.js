@@ -81,7 +81,6 @@ app.get("/api/update-ispark", async (req, res) => {
 
 app.put("/api/update/:id", async (req, res) => {
   try {
-    console.log(req.body);
     const { id } = req.params;
     const {
       PARK_NAME,
