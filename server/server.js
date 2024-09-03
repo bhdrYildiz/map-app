@@ -24,7 +24,7 @@ app.get("/api/ispark", async (req, res) => {
     const result = await pool.query("SELECT * FROM ispark_data");
     res.json(result.rows);
   } catch (error) {
-    console.error("Error fetching data:", error.message);
+    console.error("error:", error.message);
     res.status(500).json({ message: "Error fetching data" });
   }
 });
@@ -66,12 +66,12 @@ app.get("/api/update-ispark", async (req, res) => {
       );
     }
 
-    res.json({ message: "Data successfully updated" });
+    res.json({ message: "veri güncellendi" });
   } catch (error) {
-    console.error("Error updating data:", error.message);
+    console.error("Error:", error.message);
     res
       .status(500)
-      .json({ message: "Error updating data", error: error.message });
+      .json({ message: "Error", error: error.message });
   }
 });
 
@@ -105,15 +105,15 @@ app.put("/api/update/:id", async (req, res) => {
     );
 
     if (result.rowCount > 0) {
-      res.json({ message: "Data successfully updated" });
+      res.json({ message: "veri güncellendi" });
     } else {
-      res.status(404).json({ message: "Record not found" });
+      res.status(404).json({ message: "kayıt bulunamadı" });
     }
   } catch (error) {
-    console.error("Error updating data:", error.message);
+    console.error("Error:", error.message);
     res
       .status(500)
-      .json({ message: "Error updating data", error: error.message });
+      .json({ message: "Error", error: error.message });
   }
 });
 
